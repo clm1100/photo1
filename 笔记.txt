@@ -1,0 +1,38 @@
+移动端框架：
+touchcancle;
+touch.js
+click时间延时300ms
+touch事件支持多点触摸；
+手势操作
+canvas
+
+优化技巧
+
+用canvas代替image标签
+canvas出发gpu渲染
+drawImage（image，x,y)
+drawImage（image，x,y,width,height）
+
+image对象:
+预加载图片
+图片的按比例缩放
+var img = new Image()
+img.onload= function(){
+debugger
+}
+img.src = "url";
+
+css3动画：
+@keyframes
+aimation-name
+animation-name
+animation-duration
+animation-delay
+
+
+动态加载img 通过拼接字符串做到
+$(window).width()-padding*3 /4 = li的宽度；
+宽高相等；
+通过判断每行图片的第一张，不给加padding；
+
+注意设置canvas的宽高时，设置的是canvas而不是canvas的画笔，canvas.getcontext("2d");
