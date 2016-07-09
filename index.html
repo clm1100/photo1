@@ -52,7 +52,8 @@
 		}
 		render();
 		wImage = $("#large_img");
-		var loadImg = function(id){
+		domImage = wImage[0];
+		var loadImg = function(id, callback){
 			$("#large-container").css({
 				width:zWin.width(),
 				height:zWin.height()
@@ -63,23 +64,20 @@
 				var w = this.width;
 
 				var h = this.height;
-				console.log(w);
-				console.log(w/h)
 				var winWidth = zWin.width();
 				var winHeight = zWin.height();
-				console.log(winHeight);
 				var realw = winHeight*w/h;
-				console.log(realw);
 				var paddingLeft =  parseInt((winWidth - realw)/2);
 				var realh = winWidth*h/w;
 				console.log(realh);
 				var paddingTop =  parseInt((winHeight - realh)/2);
-
+				wImage.css({"width":"auto","height":"auto","paddingLeft":"0px","paddingTop":"0px"})
 				if(h/w > 1.2){
 					wImage.attr('src',imgSrc).css('height',winHeight).css('padding-left',paddingLeft);
 				}else{
 					wImage.attr('src',imgSrc).css('width',winWidth).css('padding-top',paddingTop);
 				}
+				callback&&callback();
 			}
 			imageObj.src = imgSrc;
 
@@ -90,28 +88,45 @@
 			console.log(_id);
 			loadImg(_id);
 		})
-
+		var lock = false;
 		$("#large-container").tap(function(){
 			$(this).hide();
 		}).swipeLeft(function(){
+			if(lock){
+				return
+			}
+			lock = true;
 			cid++;
 			if(cid>17){
 				cid=17
 			}else{
-				loadImg(cid)
+				loadImg(cid, function(){
+					domImage.addEventListener("webkitAnimationEnd",function(){
+						wImage.removeClass("animated bounceInRight");
+						domImage.removeEventListener("webkitAnimationEnd");
+						lock = false;
+					},false);
+					wImage.addClass("animated bounceInRight");
+				})
 			}
 
 		}).swipeRight(function(){
+			if(lock) return;
+			lock = true;
 			cid--;
 			if(cid<1){
 				cid=1
 			}else{
-				loadImg(cid)
+				loadImg(cid,function(){
+					domImage.addEventListener("webkitAnimationEnd",function(){
+						wImage.removeClass("animated bounceInLeft");
+						domImage.removeEventListener("webkitAnimationEnd");
+						lock = false;
+					},false)
+					wImage.addClass("animated bounceInLeft");
+				})
 			}
-
 		})
-
-
 	</script>		
 </body>
 </html>
